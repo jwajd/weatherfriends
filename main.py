@@ -6,11 +6,14 @@ import pprint
 from bson.objectid import ObjectId
 from bson.json_util import dumps
 from bson.json_util import loads
+from flask_cors import CORS, cross_origin
 import secrets
 import config
 
 app = Flask(__name__)
 api = Api(app)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 #https://pymongo.readthedocs.io/en/stable/tutorial.html
 
@@ -56,9 +59,10 @@ def query_create():
     return "", 201;
 
 @app.route('/get-user')
+@cross_origin()
 def query_get():
     tag = request.args.get('id')
-    return get_user(tag), 200;
+    return tuple(get_user(tag)), 200;
 
 if __name__ == "__main__":
 	app.run(debug=True)

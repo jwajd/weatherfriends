@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Search from './api/Search'
 import Display from './components/display'
-
+import FetchDB from './api/FetchDB'
 
 //<Display weatherData = {weatherData} loading = {loading}/>
 
@@ -16,6 +16,7 @@ function App(){
             <main>
                 <Search setWeatherData = {setWeatherData} setLoading = {setLoading}/>
                 <Display weatherData = {weatherData} loading = {loading}/>
+                <FetchDB/>
                 
             </main>
         </div>
