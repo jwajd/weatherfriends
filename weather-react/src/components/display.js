@@ -1,44 +1,72 @@
-import React from 'react'
+import React from "react";
+import styled, { createGlobalStyle, css } from "styled-components";
+import { getWeatherEmoji } from "../utils/displayHelper";
 
 var options = {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  };
-  let date = new Date();
-  date = date.toLocaleDateString("en-US", options);
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+};
+let date = new Date();
+date = date.toLocaleDateString("en-US", options);
 
-const Display = (props) => {
-    if(props.loading === false){
-        return(
-            <div className="info">
-                <div className="info-box">
+const InfoBox = styled.div({
+  display: "flex",
+  flexDirection: "column",
+  border: '1px solid #EEEEEE',
+  borderRadius: '10px',
+  padding: '12px',
+  boxShadow: '0px 4px 8px rgb(0, 0, 0, .15)',
+  margin: '15px 0px',
+});
+const WeatherData = styled.div({
+  display: "flex",
+  flexDirection: "column",
+  gap: 10,
+});
 
-                    <div className="location">{props.weatherData.name}, {props.weatherData.sys.country}</div>
-                    <div className="date">{date}</div>
-                </div>
-
-                <div className="weather-box">
-                    <div className="temp">
-                        {props.weatherData.main.temp}°F
-                    </div>
-                    <div className="weather">{props.weatherData.weather[0].main}</div>
-                </div>
-            </div>
-        )
-    }
-    else{
-        return null;
-    }
-}
-
-    
-
-       
-    
-
-
-
-
+const CityCountryLabel = styled.span({
+  fontWeight: 300,
+  color: "#3C3C3C",
+  fontSize: "0.65em",
+});
+const FriendTitle = ({ title, city, country }) => {
+  return (
+    <h2 style={{marginBottom: 0}}>
+      {title}{" "}
+      <CityCountryLabel>
+        {city}, {country}
+      </CityCountryLabel>
+    </h2>
+  );
+};
+const Display = ({ weatherData, loading, title }) => {
+  if (loading || !weatherData) {
+    return null;
+  }
+  const {
+    name,
+    sys: { country },
+    main: { temp },
+  } = weatherData;
+  const weatherName = weatherData.weather[0].main;
+  const weatherEmoji = getWeatherEmoji(weatherName);
+  return (
+    <>
+      <InfoBox>
+      {title ? (
+        <FriendTitle title={title} city={name} country={country} />
+      ) : null}
+        <WeatherData>
+          <div style={{flexDirection: 'row'}}>
+            <p style={{marginBottom: 0, fontSize: 30}}>{weatherEmoji}</p>
+            <p style={{marginBottom: 0}}>{temp}°F</p>
+          </div>
+          <p style={{margin: 0}}>{weatherName}</p>
+        </WeatherData>
+      </InfoBox>
+    </>
+  );
+};
 
 export default Display;
